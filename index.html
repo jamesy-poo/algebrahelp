@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Tutoring - By: James</title>
+    <title>Math Tutoring - James Gimes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,36 +78,41 @@
 </div>
 
 <script>
-    // Fetch the JSON data from the GitHub repository
+    // Corrected URL to fetch JSON data from GitHub
     const gameListUrl = "https://raw.githubusercontent.com/swarmintelli/Unblocked-Games-CDN/main/games.json";
 
     fetch(gameListUrl)
         .then(response => response.json())
         .then(data => {
             const gameListContainer = document.getElementById('game-list');
+            // Make sure we're correctly handling the structure of the JSON
             data.forEach(game => {
-                const gameItem = document.createElement('div');
-                gameItem.classList.add('game-item');
-                
-                const gameThumbnail = document.createElement('img');
-                gameThumbnail.src = game.game_image_icon;
-                
-                const gameName = document.createElement('h3');
-                gameName.innerText = game.game_name;
-                
-                const gameLink = document.createElement('a');
-                gameLink.href = "#";
-                gameLink.innerText = "Play Game";
-                gameLink.onclick = () => loadGame(game.game_name, game.iframe);
+                if (game.iframe && game.game_image_icon && game.game_name) {
+                    const gameItem = document.createElement('div');
+                    gameItem.classList.add('game-item');
+                    
+                    const gameThumbnail = document.createElement('img');
+                    gameThumbnail.src = game.game_image_icon;
+                    
+                    const gameName = document.createElement('h3');
+                    gameName.innerText = game.game_name || "Unnamed Game";
+                    
+                    const gameLink = document.createElement('a');
+                    gameLink.href = "#";
+                    gameLink.innerText = "Play Game";
+                    gameLink.onclick = () => loadGame(game.game_name, game.iframe);
 
-                gameItem.appendChild(gameThumbnail);
-                gameItem.appendChild(gameName);
-                gameItem.appendChild(gameLink);
-                
-                gameListContainer.appendChild(gameItem);
+                    gameItem.appendChild(gameThumbnail);
+                    gameItem.appendChild(gameName);
+                    gameItem.appendChild(gameLink);
+                    
+                    gameListContainer.appendChild(gameItem);
+                }
             });
         })
-        .catch(error => console.error('Error loading game list:', error));
+        .catch(error => {
+            console.error('Error loading game list:', error);
+        });
 
     // Function to load the selected game page
     function loadGame(gameName, iframeSrc) {
