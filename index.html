@@ -3,135 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Tutoring - Unblocked Games</title>
+    <title>Unblocked Games</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
         header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 0;
-            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
             text-align: center;
+        }
+        header h1 {
+            margin: 0;
         }
         .game-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
         }
         .game-item {
-            background-color: #ffffff;
+            background-color: #fff;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 200px;
+            padding: 10px;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .game-item img {
-            width: 100%;
-            height: auto;
-        }
-        .game-item h3 {
-            margin: 10px 0;
+            max-width: 100%;
+            border-radius: 8px;
         }
         .game-item a {
+            display: block;
+            margin-top: 10px;
             text-decoration: none;
-            color: #4CAF50;
+            color: #333;
             font-weight: bold;
         }
-        .game-item a:hover {
-            color: #45a049;
+        .game-page {
+            text-align: center;
+            padding: 20px;
         }
         iframe {
             width: 100%;
-            height: 80vh;
+            height: 600px;
             border: none;
+            border-radius: 8px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Math Tutoring - Unblocked Games</h1>
+    <h1>Unblocked Games</h1>
 </header>
 
-<div class="game-list" id="game-list">
-    <!-- Game thumbnails and links will be inserted here by JS -->
-</div>
+<div class="game-list" id="game-list"></div>
 
-<!-- Game Page -->
-<div id="game-page" style="display: none; width: 100%; text-align: center; margin-top: 20px;">
-    <h2 id="game-title"></h2>
-    <iframe id="game-iframe" src="" allowfullscreen></iframe>
-    <br>
-    <button onclick="goBack()">Back to Games List</button>
+<div class="game-page" id="game-page" style="display: none;">
+    <h2>Playing Game</h2>
+    <iframe id="game-iframe" src=""></iframe>
+    <a href="#" class="back-button" onclick="goBack()">Back to Games</a>
 </div>
 
 <script>
-    // Corrected URL to fetch JSON data from GitHub
-    const gameListUrl = "https://raw.githubusercontent.com/swarmintelli/Unblocked-Games-CDN/main/games.json";
-
-    fetch(gameListUrl)
+    // Fetching the JSON data from the provided URL
+    fetch('https://raw.githubusercontent.com/swarmintelli/Unblocked-Games-CDN/main/games.json')
         .then(response => response.json())
         .then(data => {
-            const gameListContainer = document.getElementById('game-list');
-            // Make sure we're correctly handling the structure of the JSON
-            if (data && Array.isArray(data)) {
-                data.forEach(game => {
-                    if (game.iframe && game.game_image_icon && game.game_name) {
-                        const gameItem = document.createElement('div');
-                        gameItem.classList.add('game-item');
-                        
-                        const gameThumbnail = document.createElement('img');
-                        gameThumbnail.src = game.game_image_icon;
-                        
-                        const gameName = document.createElement('h3');
-                        gameName.innerText = game.game_name || "Unnamed Game";
-                        
-                        const gameLink = document.createElement('a');
-                        gameLink.href = "#";
-                        gameLink.innerText = "Play Game";
-                        gameLink.onclick = () => loadGame(game.game_name, game.iframe);
+            const gameList = document.getElementById('game-list');
+            data.forEach(game => {
+                const gameItem = document.createElement('div');
+                gameItem.classList.add('game-item');
+                
+                const gameImage = document.createElement('img');
+                gameImage.src = game.game_image_icon;
+                gameItem.appendChild(gameImage);
 
-                        gameItem.appendChild(gameThumbnail);
-                        gameItem.appendChild(gameName);
-                        gameItem.appendChild(gameLink);
-                        
-                        gameListContainer.appendChild(gameItem);
-                    }
-                });
-            } else {
-                console.error("Invalid data structure received.");
-            }
+                const gameLink = document.createElement('a');
+                gameLink.href = '#';
+                gameLink.textContent = game.game_title;
+                gameLink.onclick = () => playGame(game.iframe);
+                gameItem.appendChild(gameLink);
+                
+                gameList.appendChild(gameItem);
+            });
         })
-        .catch(error => {
-            console.error('Error loading game list:', error);
-        });
+        .catch(error => console.error('Error loading game data:', error));
 
-    // Function to load the selected game page
-    function loadGame(gameName, iframeSrc) {
-        document.querySelector('header').style.display = 'none';
+    // Function to show the selected game
+    function playGame(iframeSrc) {
         document.getElementById('game-list').style.display = 'none';
         document.getElementById('game-page').style.display = 'block';
-        document.getElementById('game-title').innerText = gameName;
         document.getElementById('game-iframe').src = iframeSrc;
     }
 
     // Function to go back to the game list
     function goBack() {
-        document.querySelector('header').style.display = 'block';
-        document.getElementById('game-list').style.display = 'flex';
+        document.getElementById('game-list').style.display = 'grid';
         document.getElementById('game-page').style.display = 'none';
+        document.getElementById('game-iframe').src = '';
     }
 </script>
 
