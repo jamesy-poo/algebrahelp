@@ -73,5 +73,131 @@
             margin-bottom: 20px;
             padding: 10px;
             font-size: 18px;
-            width: 100
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        #dark-mode-toggle {
+            cursor: pointer;
+            padding: 10px;
+            margin-left: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+        }
+        #dark-mode-toggle:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="game-container">
+        <button onclick="openInNewTab()">Open Full Site in New Tab</button>
+
+        <h1>Unblocked Games</h1>
+        
+        <input type="text" class="search-bar" id="search-bar" oninput="filterGames()" placeholder="Search games..." />
+
+        <div id="game-list">
+            <h3>Game List</h3>
+            <ul class="game-list" id="game-list-items">
+                <!-- Game items will be loaded here dynamically -->
+            </ul>
+        </div>
+    </div>
+
+    <iframe id="game-frame" src="" frameborder="0"></iframe>
+
+    <button id="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+
+    <script>
+        const games = [
+            {
+                "name": "Block Puzzle Classic",
+                "game_url": "https://www.freeonlinegames.com/game/block-puzzle-classic",
+                "game_image_icon": "https://www.freeonlinegames.com/files/game_images/block-puzzle-classic-1.jpg",
+                "game-id": "block-puzzle-classic",
+                "iframe": "<iframe width='100%' height='100%' src='https://www.freeonlinegames.com/game/block-puzzle-classic' frameborder='0' allowfullscreen></iframe>"
+            },
+            {
+                "name": "Retro Bowl",
+                "game_url": "https://hfmanor.com/retro-bowl",
+                "game_image_icon": "https://hfmanor.com/image/retro-bowl",
+                "game-id": "retro-bowl",
+                "iframe": "<iframe width='100%' height='100%' src='https://hfmanor.com/retro-bowl' frameborder='0' allowfullscreen></iframe>"
+            }
+            // Add more games here
+        ];
+
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+        function toggleFavorite(gameId) {
+            const index = favorites.indexOf(gameId);
+            if (index !== -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(gameId);
+            }
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            renderGameList();
+        }
+
+        function openInNewTab() {
+            window.open("about:blank", "_blank");
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle("dark-mode");
+            const darkModeToggle = document.getElementById("dark-mode-toggle");
+            if (body.classList.contains("dark-mode")) {
+                darkModeToggle.textContent = "Light Mode";
+            } else {
+                darkModeToggle.textContent = "Dark Mode";
+            }
+        }
+
+        function filterGames() {
+            const query = document.getElementById("search-bar").value.toLowerCase();
+            renderGameList(query);
+        }
+
+        function renderGameList(query = "") {
+            const gameListItems = document.getElementById("game-list-items");
+            gameListItems.innerHTML = "";
+
+            games.filter(game => game.name.toLowerCase().includes(query)).forEach(game => {
+                const gameItem = document.createElement("li");
+                const gameLink = document.createElement("a");
+                const gameThumbnail = document.createElement("img");
+                const favButton = document.createElement("button");
+
+                gameThumbnail.src = game.game_image_icon;
+                gameThumbnail.alt = game.name;
+                gameThumbnail.className = "game-thumbnail";
+                gameLink.href = game.game_url;
+                gameLink.textContent = game.name;
+                favButton.className = "fav-btn";
+                favButton.textContent = favorites.includes(game["game-id"]) ? "★" : "☆";
+                favButton.classList.toggle("fav", favorites.includes(game["game-id"]));
+
+                favButton.onclick = () => {
+                    toggleFavorite(game["game-id"]);
+                };
+
+                gameItem.appendChild(gameThumbnail);
+                gameItem.appendChild(gameLink);
+                gameItem.appendChild(favButton);
+                gameListItems.appendChild(gameItem);
+            });
+        }
+
+        renderGameList();
+    </script>
+
+</body>
+</html>
