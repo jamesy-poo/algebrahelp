@@ -1,194 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblocked Games</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .game-container {
-            margin: 20px;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .game-list {
-            list-style: none;
-            padding: 0;
-        }
-        .game-list li {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-        }
-        .game-list a {
-            text-decoration: none;
-            color: #333;
-            font-size: 18px;
-        }
-        .game-list a:hover {
-            color: #4CAF50;
-        }
-        .game-thumbnail {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-        #game-frame {
-            margin-top: 20px;
-            width: 100%;
-            height: 600px;
-            display: none;
-        }
-        .fav-btn {
-            cursor: pointer;
-            font-size: 20px;
-            background: transparent;
-            border: none;
-            color: #FFD700;
-        }
-        .fav-btn.fav {
-            color: #ff4500;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-            padding: 10px;
-            font-size: 18px;
-            width: 100%;
-            box-sizing: border-box;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-        }
-        #dark-mode-toggle {
-            cursor: pointer;
-            padding: 10px;
-            margin-left: 10px;
-            font-size: 18px;
-            border-radius: 5px;
-            background-color: #333;
-            color: white;
-            border: none;
-        }
-        #dark-mode-toggle:hover {
-            background-color: #555;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unblocked Games</title>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --text: #111;
+      --card: white;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #fff;
+      --card: #1e1e1e;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: #222;
+      color: #fff;
+    }
+
+    .search-bar {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .toggle-btn {
+      background: #444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .game-item {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      position: relative;
+    }
+
+    .game-item:hover {
+      transform: scale(1.03);
+    }
+
+    .game-item img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .title {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .favorite {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 28px;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .favorite.active {
+      color: gold;
+    }
+
+    .game-page {
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .back-button {
+      margin-top: 20px;
+      background: #111;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="game-container">
-        <button onclick="openInNewTab()">Open Full Site in New Tab</button>
+<header>
+  <h1>Unblocked Games</h1>
+</header>
 
-        <h1>Unblocked Games</h1>
-        
-        <input type="text" class="search-bar" id="search-bar" oninput="filterGames()" placeholder="Search games..." />
+<div class="controls">
+  <input type="text" id="search" class="search-bar" placeholder="Search games..." />
+  <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+</div>
 
-        <div id="game-list">
-            <h3>Game List</h3>
-            <ul class="game-list" id="game-list-items">
-                <!-- Game items will be loaded here dynamically -->
-            </ul>
-        </div>
-    </div>
+<div class="game-list" id="game-list"></div>
 
-    <iframe id="game-frame" src="" frameborder="0"></iframe>
+<div class="game-page" id="game-page">
+  <h2 id="game-title"></h2>
+  <iframe id="game-frame"></iframe>
+  <br />
+  <a href="#" class="back-button" onclick="goBack()">Back to Game List</a>
+</div>
 
-    <button id="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+<script>
+  let allGames = [];
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-    <script>
-        let games = [];
-        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  fetch('games.json')
+    .then(res => res.json())
+    .then(data => {
+      allGames = data;
+      renderGames();
+    });
 
-        // Fetch games from the local games.json file
-        fetch('games.json')
-            .then(response => response.json())
-            .then(data => {
-                games = data;
-                renderGameList();
-            })
-            .catch(error => console.error('Error loading the games:', error));
+  function renderGames() {
+    const list = document.getElementById("game-list");
+    const search = document.getElementById("search").value.toLowerCase();
+    list.innerHTML = "";
 
-        function toggleFavorite(gameId) {
-            const index = favorites.indexOf(gameId);
-            if (index !== -1) {
-                favorites.splice(index, 1);
-            } else {
-                favorites.push(gameId);
-            }
-            localStorage.setItem("favorites", JSON.stringify(favorites));
-            renderGameList();
-        }
+    let filtered = allGames.filter(g => g.name.toLowerCase().includes(search));
+    let favs = filtered.filter(g => favorites.includes(g["game-id"]));
+    let others = filtered.filter(g => !favorites.includes(g["game-id"]));
 
-        function openInNewTab() {
-            window.open("about:blank", "_blank");
-        }
+    [...favs, ...others].forEach(game => {
+      const item = document.createElement("div");
+      item.className = "game-item";
 
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle("dark-mode");
-            const darkModeToggle = document.getElementById("dark-mode-toggle");
-            if (body.classList.contains("dark-mode")) {
-                darkModeToggle.textContent = "Light Mode";
-            } else {
-                darkModeToggle.textContent = "Dark Mode";
-            }
-        }
+      const img = document.createElement("img");
+      img.src = game.game_image_icon;
+      item.appendChild(img);
 
-        function filterGames() {
-            const query = document.getElementById("search-bar").value.toLowerCase();
-            renderGameList(query);
-        }
+      const title = document.createElement("div");
+      title.className = "title";
+      title.innerText = game.name;
+      item.appendChild(title);
 
-        function renderGameList(query = "") {
-            const gameListItems = document.getElementById("game-list-items");
-            gameListItems.innerHTML = "";
+      const star = document.createElement("div");
+      star.className = "favorite" + (favorites.includes(game["game-id"]) ? " active" : "");
+      star.innerHTML = "★";
+      star.onclick = (e) => {
+        e.stopPropagation();
+        toggleFavorite(game["game-id"]);
+      };
+      item.appendChild(star);
 
-            games.filter(game => game.name.toLowerCase().includes(query)).forEach(game => {
-                const gameItem = document.createElement("li");
-                const gameLink = document.createElement("a");
-                const gameThumbnail = document.createElement("img");
-                const favButton = document.createElement("button");
+      item.onclick = () => playGame(game.name, game.game_url);
+      list.appendChild(item);
+    });
+  }
 
-                gameThumbnail.src = game.game_image_icon;
-                gameThumbnail.alt = game.name;
-                gameThumbnail.className = "game-thumbnail";
-                gameLink.href = game.game_url;
-                gameLink.textContent = game.name;
-                favButton.className = "fav-btn";
-                favButton.textContent = favorites.includes(game["game-id"]) ? "★" : "☆";
-                favButton.classList.toggle("fav", favorites.includes(game["game-id"]));
+  function toggleFavorite(id) {
+    if (favorites.includes(id)) {
+      favorites = favorites.filter(f => f !== id);
+    } else {
+      favorites.push(id);
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderGames();
+  }
 
-                favButton.onclick = () => {
-                    toggleFavorite(game["game-id"]);
-                };
+  function playGame(name, url) {
+    document.getElementById('game-list').style.display = 'none';
+    document.getElementById('game-page').style.display = 'block';
+    document.getElementById('game-title').innerText = name;
+    document.getElementById('game-frame').src = url;
+  }
 
-                gameItem.appendChild(gameThumbnail);
-                gameItem.appendChild(gameLink);
-                gameItem.appendChild(favButton);
-                gameListItems.appendChild(gameItem);
-            });
-        }
+  function goBack() {
+    document.getElementById('game-list').style.display = 'grid';
+    document.getElementById('game-page').style.display = 'none';
+    document.getElementById('game-frame').src = '';
+  }
 
-        renderGameList();
+  document.getElementById("search").addEventListener("input", renderGames);
+
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+  }
+
+  // Restore dark mode
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+</body>
+</html>
     </script>
 
 </body>
