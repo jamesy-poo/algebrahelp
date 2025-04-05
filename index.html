@@ -1,126 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblocked Games</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-        }
-        .game-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            padding: 20px;
-        }
-        .game-item {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .game-item img {
-            max-width: 100%;
-            border-radius: 8px;
-        }
-        .game-item a {
-            display: block;
-            margin-top: 10px;
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        .game-page {
-            text-align: center;
-            padding: 20px;
-        }
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
-            border-radius: 8px;
-        }
-        .back-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unblocked Games</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+    }
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .game-item {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .game-item:hover {
+      transform: scale(1.03);
+    }
+    .game-item img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .game-item .title {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+    .game-page {
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+    }
+    .back-button {
+      margin-top: 20px;
+      background: #111;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <h1>Unblocked Games</h1>
+  <h1>Unblocked Games</h1>
 </header>
 
 <div class="game-list" id="game-list"></div>
 
-<div class="game-page" id="game-page" style="display: none;">
-    <h2>Playing Game</h2>
-    <iframe id="game-iframe" src=""></iframe>
-    <a href="#" class="back-button" onclick="goBack()">Back to Games</a>
+<div class="game-page" id="game-page">
+  <h2 id="game-title"></h2>
+  <iframe id="game-frame"></iframe>
+  <br />
+  <a href="#" class="back-button" onclick="goBack()">Back to Game List</a>
 </div>
 
 <script>
-    fetch('games.json')
-        .then(response => response.json())
-        .then(data => {
-            const gameList = document.getElementById('game-list');
-            data.forEach(game => {
-                const gameItem = document.createElement('div');
-                gameItem.classList.add('game-item');
-                
-                const gameImage = document.createElement('img');
-                gameImage.src = game.game_image_icon;
-                gameItem.appendChild(gameImage);
+  fetch('games.json')
+    .then(response => response.json())
+    .then(data => {
+      const list = document.getElementById('game-list');
+      data.forEach(game => {
+        const item = document.createElement('div');
+        item.className = 'game-item';
 
-                const gameLink = document.createElement('a');
-                gameLink.href = '#';
-                gameLink.textContent = game.game_title;
-                gameLink.onclick = () => playGame(game.iframe);
-                gameItem.appendChild(gameLink);
-                
-                gameList.appendChild(gameItem);
-            });
-        })
-        .catch(error => console.error('Error loading game data:', error));
+        const img = document.createElement('img');
+        img.src = game.game_image_icon;
+        item.appendChild(img);
 
-    // Function to show the selected game
-    function playGame(iframeSrc) {
-        document.getElementById('game-list').style.display = 'none';
-        document.getElementById('game-page').style.display = 'block';
-        document.getElementById('game-iframe').src = iframeSrc;
-    }
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.innerText = game.name;
+        item.appendChild(title);
 
-    // Function to go back to the game list
-    function goBack() {
-        document.getElementById('game-list').style.display = 'grid';
-        document.getElementById('game-page').style.display = 'none';
-        document.getElementById('game-iframe').src = '';
-    }
+        item.onclick = () => playGame(game.name, game.game_url);
+        list.appendChild(item);
+      });
+    });
+
+  function playGame(name, url) {
+    document.getElementById('game-list').style.display = 'none';
+    document.getElementById('game-page').style.display = 'block';
+    document.getElementById('game-title').innerText = name;
+    document.getElementById('game-frame').src = url;
+  }
+
+  function goBack() {
+    document.getElementById('game-list').style.display = 'grid';
+    document.getElementById('game-page').style.display = 'none';
+    document.getElementById('game-frame').src = '';
+  }
 </script>
 
 </body>
