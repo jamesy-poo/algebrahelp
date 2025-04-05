@@ -115,25 +115,17 @@
     <button id="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
 
     <script>
-        const games = [
-            {
-                "name": "Block Puzzle Classic",
-                "game_url": "https://www.freeonlinegames.com/game/block-puzzle-classic",
-                "game_image_icon": "https://www.freeonlinegames.com/files/game_images/block-puzzle-classic-1.jpg",
-                "game-id": "block-puzzle-classic",
-                "iframe": "<iframe width='100%' height='100%' src='https://www.freeonlinegames.com/game/block-puzzle-classic' frameborder='0' allowfullscreen></iframe>"
-            },
-            {
-                "name": "Retro Bowl",
-                "game_url": "https://hfmanor.com/retro-bowl",
-                "game_image_icon": "https://hfmanor.com/image/retro-bowl",
-                "game-id": "retro-bowl",
-                "iframe": "<iframe width='100%' height='100%' src='https://hfmanor.com/retro-bowl' frameborder='0' allowfullscreen></iframe>"
-            }
-            // Add more games here
-        ];
-
+        let games = [];
         let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+        // Fetch games from the local games.json file
+        fetch('games.json')
+            .then(response => response.json())
+            .then(data => {
+                games = data;
+                renderGameList();
+            })
+            .catch(error => console.error('Error loading the games:', error));
 
         function toggleFavorite(gameId) {
             const index = favorites.indexOf(gameId);
