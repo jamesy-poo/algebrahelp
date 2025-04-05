@@ -86,29 +86,33 @@
         .then(data => {
             const gameListContainer = document.getElementById('game-list');
             // Make sure we're correctly handling the structure of the JSON
-            data.forEach(game => {
-                if (game.iframe && game.game_image_icon && game.game_name) {
-                    const gameItem = document.createElement('div');
-                    gameItem.classList.add('game-item');
-                    
-                    const gameThumbnail = document.createElement('img');
-                    gameThumbnail.src = game.game_image_icon;
-                    
-                    const gameName = document.createElement('h3');
-                    gameName.innerText = game.game_name || "Unnamed Game";
-                    
-                    const gameLink = document.createElement('a');
-                    gameLink.href = "#";
-                    gameLink.innerText = "Play Game";
-                    gameLink.onclick = () => loadGame(game.game_name, game.iframe);
+            if (data && Array.isArray(data)) {
+                data.forEach(game => {
+                    if (game.iframe && game.game_image_icon && game.game_name) {
+                        const gameItem = document.createElement('div');
+                        gameItem.classList.add('game-item');
+                        
+                        const gameThumbnail = document.createElement('img');
+                        gameThumbnail.src = game.game_image_icon;
+                        
+                        const gameName = document.createElement('h3');
+                        gameName.innerText = game.game_name || "Unnamed Game";
+                        
+                        const gameLink = document.createElement('a');
+                        gameLink.href = "#";
+                        gameLink.innerText = "Play Game";
+                        gameLink.onclick = () => loadGame(game.game_name, game.iframe);
 
-                    gameItem.appendChild(gameThumbnail);
-                    gameItem.appendChild(gameName);
-                    gameItem.appendChild(gameLink);
-                    
-                    gameListContainer.appendChild(gameItem);
-                }
-            });
+                        gameItem.appendChild(gameThumbnail);
+                        gameItem.appendChild(gameName);
+                        gameItem.appendChild(gameLink);
+                        
+                        gameListContainer.appendChild(gameItem);
+                    }
+                });
+            } else {
+                console.error("Invalid data structure received.");
+            }
         })
         .catch(error => {
             console.error('Error loading game list:', error);
