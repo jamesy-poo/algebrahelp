@@ -1218,11 +1218,11 @@
 	  "iframe": " <iframe width=\"1366\" height=\"768\" src=\"https://hfmanor.com/bobtherobber2\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe> "
 	},
 	{
-	  "name": "Robuxclicker",
-	  "game_url": "https://hfmanor.com/robuxclicker",
-	  "game_image_icon": "https://hfmanor.com/image/robuxclicker",
-	  "game-id": "robuxclicker",
-	  "iframe": " <iframe width=\"1366\" height=\"768\" src=\"https://hfmanor.com/robuxclicker\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe> "
+	    "name": "Block Puzzle",
+  	    "game_url": "https://html5gamedistribution.com/block-puzzle/",
+	    "game_image_icon": "https://html5gamedistribution.com/block-puzzle/images/thumbnail.jpg",
+  	    "game-id": "block-puzzle",
+  	    "iframe": "<iframe width='100%' height='100%' src='https://html5gamedistribution.com/block-puzzle/' frameborder='0' allowfullscreen></iframe>"
 	},
 	{
 	  "name": "Precision Client",
