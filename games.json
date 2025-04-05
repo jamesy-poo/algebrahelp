@@ -1,4 +1,11 @@
 [
+  {
+    "name": "Block Blast",
+    "game_url": "https://examplecdn.com/block-blast",
+    "game_image_icon": "https://examplecdn.com/images/block-blast.png",
+    "game-id": "block-blast",
+    "iframe": "<iframe width='100%' height='100%' src='https://examplecdn.com/block-blast' frameborder='0' allowfullscreen></iframe>"
+	},
 	{
 	  "name": "Retro Bowl",
 	  "game_url": "https://hfmanor.com/retro-bowl",
